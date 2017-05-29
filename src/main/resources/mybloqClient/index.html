@@ -1,0 +1,86 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>MyBloq Client</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script>
+        var index = 0;
+
+
+        $(document).ready(function() {
+
+            $.ajax({
+                url: "http://localhost:8080/post/all",
+                type: "GET",
+                dataType: "text"
+            }).done(function(data) {
+                if (data.length > 0) {
+                    data = JSON.parse(data);
+                    for (var i = 0; i < data.length; i++) {
+                        index++;
+                        $("<div class='panel panel-primary'><div class='panel-heading'>" + data[i].id + "</div><div class='panel-body'>" + data[i].content + "</div></div>")
+                            .appendTo("#messages");
+                    }
+
+
+                }
+            });
+
+            $(document).on("click", "#send", function() {
+                var content = $("#textarea").val();
+
+                $.ajax({
+                    url: "http://localhost:8080/post/" + content,
+                    type: "GET",
+                    dataType: "text"
+                }).done(function(data) {
+                    index++;
+                    $("<div class='panel panel-primary'><div class='panel-heading'>" + index + "</div><div class='panel-body'>" + data + "</div></div>")
+                        .appendTo("#messages");
+                });
+
+                $("#textarea").val("");
+            });
+        });
+
+    </script>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="blog-header">
+            <h3 class="blog-title">Форум</h3>
+        </div>
+
+        <div class="row">
+            <div class="panel-group" id="messages">
+
+            </div>
+        </div>
+        <div class="row">
+            <form name="form" action="#" method="post" id="form">
+                <div class="form-group">
+                    <label for="textarea">Сообщение</label>
+                    <textarea id="textarea" name="content" rows="4" class="form-control"></textarea>
+                </div>
+                <input type="button" id="send" value="Отправить" class="btn btn-success pull-right" />
+            </form>
+        </div>
+    </div>
+
+
+
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
+
+</html>
